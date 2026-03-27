@@ -1,16 +1,30 @@
+<!--
+  ================================================================
+  飲食店開業ナビ 神奈川県版 (kanagawa.html)
+  ================================================================
+  【よく修正する場所】
+  ・業者データ → DATA ブロック（ishikawa.htmlと同構造）
+    └ 業者追加/削除はここの配列を編集するだけ
+  ・役所検索キーワード → YAKUSHO_QUERIES
+  ・業態設定 → TYPE_CFG
+  ================================================================
+  最終更新: 2026-03-27
+  ================================================================
+-->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZCZ5VWE43F"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-ZCZ5VWE43F');
-  </script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZCZ5VWE43F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZCZ5VWE43F');
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="bdOGSySwg18qOdBZs5hH9rS4VcplVwYfS6ZX6xeKubA" />
 
   <!-- ═══════════════════════════════════════════
        SEO: タイトル・ディスクリプション
@@ -147,6 +161,18 @@
 
     footer{text-align:center;padding:24px 20px;font-size:11px;color:var(--muted);border-top:1px solid var(--line);background:var(--card);}
 
+    /* SEO TEXT */
+    .seo-wrap{background:var(--card);border-top:1px solid var(--line);padding:36px 20px 40px;}
+    .seo-inner{max-width:820px;margin:0 auto;}
+    .seo-inner h2{font-size:18px;font-weight:800;margin-bottom:12px;color:var(--text);}
+    .seo-inner h3{font-size:14px;font-weight:700;margin:18px 0 8px;color:var(--text);}
+    .seo-inner p{font-size:13px;color:#374151;line-height:1.8;margin-bottom:10px;}
+    .seo-inner ol{font-size:13px;color:#374151;line-height:1.8;padding-left:20px;margin-bottom:10px;}
+    .seo-inner ol li{margin-bottom:5px;}
+    .region-nav{display:flex;align-items:center;gap:10px;margin-top:22px;flex-wrap:wrap;font-size:13px;color:var(--muted);}
+    .region-nav a{background:var(--accent-soft);color:var(--accent);padding:5px 16px;border-radius:999px;font-weight:700;font-size:12px;transition:background .15s,color .15s;}
+    .region-nav a:hover{background:var(--accent);color:#fff;}
+
     @media(max-width:560px){
       .tgrid{grid-template-columns:repeat(4,1fr);gap:7px;}
       .tcard{padding:12px 4px 9px;}
@@ -236,6 +262,35 @@
   </div>
 
 </div><!-- /wrap -->
+
+<!-- ══ SEO TEXT SECTION ══ -->
+<section class="seo-wrap">
+  <div class="seo-inner">
+    <h2>神奈川県で飲食店を開業するには</h2>
+    <p>神奈川県は横浜市・川崎市・相模原市など大都市が集まる全国有数の激戦区です。横浜中華街・みなとみらいエリアの観光需要、川崎の工業地帯周辺のランチ需要、藤沢・鎌倉・小田原など湘南・西湘エリアの観光客需要と、エリアごとに客層が異なるため、出店場所の選定が成功の鍵になります。</p>
+
+    <h3>神奈川県での飲食店開業：主な流れ</h3>
+    <ol>
+      <li><strong>業態・出店エリアを決める</strong>（横浜市・川崎市・相模原市・藤沢市・鎌倉市など）</li>
+      <li><strong>保健所で「飲食店営業許可」を申請</strong>。食品衛生責任者の資格が必要（未取得の場合は事前講習）</li>
+      <li><strong>消防署へ防火管理者選任届</strong>（客席30席以上または延べ床面積300㎡以上の場合）</li>
+      <li><strong>税務署に開業届・青色申告承認申請書を提出</strong>（開業後1か月以内）</li>
+      <li><strong>食材仕入れ先・厨房機器・保険・POSレジ等を手配</strong>して開業準備を整える</li>
+    </ol>
+
+    <h3>横浜市・川崎市の保健所について</h3>
+    <p>横浜市で飲食店を開業する場合は、各区の「横浜市保健センター（生活衛生課）」が許可申請の窓口です。横浜市は18区それぞれに保健センターがあるため、物件の区を確認してから手続きを進めてください。川崎市は「川崎市保健所食品安全担当」が窓口となります。施設の図面提出・事前相談が原則必要なため、物件契約前に相談することをおすすめします。</p>
+
+    <h3>このページの使い方</h3>
+    <p>業態（焼き鳥・ラーメン・カフェ・居酒屋など）と市区（横浜市・川崎市・藤沢市など）を選択すると、その組み合わせに合った食材仕入れ先・役所手続き・税理士・保険・POSシステムを一覧で確認できます。比較ランキングや推薦は一切行っておらず、中立的な情報提供を目的としています。</p>
+
+    <div class="region-nav">
+      <span>他の地域を見る：</span>
+      <a href="ishikawa.html">石川県版</a>
+      <a href="tokyo.html">東京都版</a>
+    </div>
+  </div>
+</section>
 
 <footer>
   飲食店開業ナビ 神奈川県版 ／ 掲載情報は参考情報です。各社の最新情報は直接ご確認ください。<br>
