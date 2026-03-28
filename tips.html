@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZCZ5VWE43F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZCZ5VWE43F');
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>飲食店開業Tips・まかない実験室｜オーナー向け実務アドバイス</title>
+  <meta name="description" content="飲食店オーナー向けの実務Tips集。まかないで試した変わり副菜レシピ・開業アドバイス・新メニューのヒントを定期更新。">
+  <meta property="og:title" content="飲食店開業Tips・まかない実験室" />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://navi-craft.github.io/insyoku-navi/tips.html" />
+  <style>
+    :root {
+      --bg:#f8f9fb; --card:#fff; --text:#1a1f2e; --muted:#6b7280; --line:#e8eaed;
+      --accent:#e85d04; --accent-soft:#fff4ee;
+      --green:#059669; --green-soft:#ecfdf5;
+      --shadow-sm:0 2px 8px rgba(0,0,0,.06);
+      --shadow:0 8px 24px rgba(0,0,0,.09);
+      --r:16px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;}
+    a{color:inherit;text-decoration:none;}
+
+    /* HEADER */
+    .hd{background:var(--card);border-bottom:1px solid var(--line);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:var(--shadow-sm);}
+    .logo{font-size:15px;font-weight:800;letter-spacing:-.02em;}
+    .logo span{color:var(--accent);}
+    .hd-nav{display:flex;gap:12px;align-items:center;flex-shrink:0;}
+    .hd-nav a{font-size:11px;color:var(--muted);white-space:nowrap;padding:4px 8px;border-radius:6px;transition:background .15s;}
+    .hd-nav a:hover{background:var(--accent-soft);color:var(--accent);}
+    .hd-nav a.active{color:var(--accent);font-weight:700;}
+
+    /* HERO */
+    .hero{background:linear-gradient(140deg,#111827 0%,#1e2d40 60%,#1a3a5c 100%);color:#fff;padding:52px 20px 44px;text-align:center;}
+    .hero-icon{font-size:40px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(20px,5vw,34px);font-weight:900;line-height:1.2;margin-bottom:10px;}
+    .hero-sub{color:rgba(255,255,255,.75);font-size:13px;max-width:480px;margin:0 auto;}
+
+    /* MAIN */
+    .wrap{max-width:720px;margin:0 auto;padding:36px 18px 80px;}
+
+    /* TABS */
+    .tabs{display:flex;gap:8px;margin-bottom:28px;background:var(--card);padding:6px;border-radius:12px;border:1px solid var(--line);box-shadow:var(--shadow-sm);}
+    .tab-btn{flex:1;padding:10px;border:none;border-radius:8px;background:transparent;font-size:14px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .15s;}
+    .tab-btn.active{background:var(--accent);color:#fff;}
+
+    /* ARTICLE CARDS */
+    .tip-card{background:var(--card);border-radius:var(--r);border:1px solid var(--line);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:20px;}
+    .tip-img{width:100%;height:200px;object-fit:cover;display:block;}
+    .tip-body{padding:20px;}
+    .tip-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+    .tag{font-size:11px;background:var(--accent-soft);color:var(--accent);padding:3px 9px;border-radius:999px;font-weight:600;}
+    .tip-title{font-size:17px;font-weight:800;line-height:1.35;margin-bottom:10px;}
+    .tip-text{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:10px;}
+    .tip-meta{font-size:12px;font-weight:700;color:var(--green);background:var(--green-soft);display:inline-block;padding:4px 10px;border-radius:6px;}
+
+    /* ACCORDION */
+    .acc-wrap{margin-bottom:12px;}
+    .acc-btn{width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:left;transition:background .15s;}
+    .acc-btn:hover{background:var(--accent-soft);}
+    .acc-btn[aria-expanded="true"]{border-radius:12px 12px 0 0;border-bottom-color:transparent;background:var(--accent-soft);color:var(--accent);}
+    .acc-icon{font-size:18px;transition:transform .2s;flex-shrink:0;}
+    .acc-btn[aria-expanded="true"] .acc-icon{transform:rotate(45deg);}
+    .acc-body{display:none;padding:16px 20px;background:var(--card);border:1px solid var(--line);border-top:none;border-radius:0 0 12px 12px;font-size:13px;color:var(--muted);line-height:1.8;}
+    .acc-body.open{display:block;}
+    .acc-body ul{padding-left:16px;}
+    .acc-body li{margin-bottom:6px;}
+    .acc-body .aff-link{color:var(--accent);font-weight:600;text-decoration:underline;}
+
+    /* FOOTER */
+    footer{text-align:center;padding:32px 20px;font-size:11px;color:var(--muted);border-top:1px solid var(--line);}
+
+    @media(max-width:480px){
+      .hd-nav a{font-size:10px;padding:3px 5px;}
+    }
+  </style>
+</head>
+<body>
+
+<header class="hd">
+  <a href="/insyoku-navi/" class="logo">🍽️ 飲食店<span>開業ナビ</span></a>
+  <nav class="hd-nav">
+    <a href="/insyoku-navi/">トップ</a>
+    <a href="/insyoku-navi/simulator.html">売上シミュレーター</a>
+    <a href="/insyoku-navi/tips.html" class="active">開業Tips</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-icon">📖</div>
+  <h1>開業Tips・まかない実験室</h1>
+  <p class="hero-sub">飲食店オーナーが現場で使えるヒント集<br>副菜の実験・開業アドバイス・原価計算のコツを定期更新</p>
+</section>
+
+<main class="wrap">
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('makanai', this)">🍳 まかない実験室</button>
+    <button class="tab-btn" onclick="showTab('advice', this)">📋 開業アドバイス</button>
+  </div>
+
+  <!-- まかない実験室 -->
+  <section id="makanai">
+
+    <article class="tip-card" id="article-001">
+      <img src="https://source.unsplash.com/800x400/?japanese,pickles,food" alt="らっきょのゆず胡椒蜂蜜漬け" class="tip-img" loading="lazy">
+      <div class="tip-body">
+        <div class="tip-tags">
+          <span class="tag">カレー屋向け</span>
+          <span class="tag">副菜</span>
+          <span class="tag">試作10分</span>
+        </div>
+        <h2 class="tip-title">カレー屋の隠れ名品？　らっきょのゆず胡椒蜂蜜漬け</h2>
+        <p class="tip-text">カレーの付け合わせのらっきょに、ゆず胡椒と蜂蜜を小さじ1ずつ加えて一晩漬けるだけ。甘みと辛みが絶妙で、通常のらっきょと差別化できる。原価：1食あたり約8円。250円で出せれば利益率96%。</p>
+        <div class="tip-meta">原価目安：1食8円〜</div>
+      </div>
+    </article>
+
+    <article class="tip-card" id="article-002">
+      <img src="https://source.unsplash.com/800x400/?tofu,japanese,food" alt="ネギ油の冷奴" class="tip-img" loading="lazy">
+      <div class="tip-body">
+        <div class="tip-tags">
+          <span class="tag">ラーメン屋向け</span>
+          <span class="tag">副菜</span>
+          <span class="tag">試作5分</span>
+        </div>
+        <h2 class="tip-title">ラーメン屋のまかないから生まれた　ネギ油の冷奴</h2>
+        <p class="tip-text">ラーメン用に仕込むネギ油を豆腐にかけるだけ。ごま油・にんにく・長ねぎで作るネギ油は、豆腐と相性抜群。原価：1食約30円。380円で出せれば利益率92%。</p>
+        <div class="tip-meta">原価目安：1食30円〜</div>
+      </div>
+    </article>
+
+    <article class="tip-card" id="article-003">
+      <img src="https://source.unsplash.com/800x400/?tomato,japanese,appetizer" alt="出汁漬けトマトの浅漬け" class="tip-img" loading="lazy">
+      <div class="tip-body">
+        <div class="tip-tags">
+          <span class="tag">居酒屋向け</span>
+          <span class="tag">副菜</span>
+          <span class="tag">試作15分</span>
+        </div>
+        <h2 class="tip-title">居酒屋の試作品　出汁漬けトマトの浅漬け</h2>
+        <p class="tip-text">昆布だしに塩・みりんを合わせ、湯むきトマトを2時間漬ける。酒の肴として珍しさがある。トマトの甘みと出汁の旨みが合わさり、箸休めとして人気が出やすい。原価：1食約35円。</p>
+        <div class="tip-meta">原価目安：1食35円〜</div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- 開業アドバイス -->
+  <section id="advice" style="display:none;">
+
+    <div class="acc-wrap">
+      <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+        <span>📊 開業前に必ず確認する3つの数字</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <ul>
+          <li><strong>損益分岐点</strong>：固定費 ÷ 粗利益率。この売上を下回ると赤字になります。</li>
+          <li><strong>客単価</strong>：1人あたり平均いくら使うか。業態・立地で大きく変わります。</li>
+          <li><strong>月間来客数目標</strong>：損益分岐点 ÷ 客単価 ÷ 営業日数 = 1日の最低来客数。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="acc-wrap">
+      <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+        <span>🛒 食材仕入れ先の選び方</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <ul>
+          <li><strong>業務スーパー・コストコ</strong>：少量多品目。開業初期・小規模店向け。</li>
+          <li><strong>地元市場・仲卸</strong>：鮮度と価格が安定。関係構築が鍵。週2〜3回配達も交渉可。</li>
+          <li><strong>ネット仕入れ（Amazon Business等）</strong>：消耗品・調味料・乾物などに最適。送料を考えまとめ注文が基本。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="acc-wrap">
+      <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+        <span>👥 人件費を抑える工夫</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <ul>
+          <li><strong>ピークタイムのみパート採用</strong>：ランチ・ディナーのコア時間帯に絞る。</li>
+          <li><strong>多能工化</strong>：1人がホール・仕込み・洗い場をこなせる体制。マニュアル整備が前提。</li>
+          <li><strong>シフト最適化</strong>：売上データをもとに曜日・時間帯別に人数を調整する。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="acc-wrap">
+      <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+        <span>📱 SNSを使った開業前集客</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <ul>
+          <li><strong>Googleビジネスプロフィール</strong>：開業前でも登録可。地図検索で表示されます。写真を充実させると集客効果大。</li>
+          <li><strong>Instagram事前投稿</strong>：内装工事中・仕込み準備中の写真を投稿。開業当日のフォロワー数が全然違います。</li>
+          <li>開業1ヶ月前からアカウントを育て始めるのが理想的なタイミングです。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="acc-wrap">
+      <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+        <span>📝 確定申告で損しないために</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <ul>
+          <li><strong>青色申告（65万円控除）</strong>：開業届と同時に「青色申告承認申請書」を提出。年65万円の特別控除が受けられます。</li>
+          <li><strong>クラウド会計の活用</strong>：領収書をスマホで撮るだけで帳簿が自動作成されます。</li>
+        </ul>
+        <p style="margin-top:12px;">
+          <a class="aff-link" href="https://px.a8.net/svt/ejp?a8mat=4AZNCL+1KK78Y+3SPO+9FL80Y" target="_blank" rel="noopener">freee 開業（無料プランあり）→</a>
+          <a class="aff-link" href="https://px.a8.net/svt/ejp?a8mat=4AZO4H+37I44Y+4JGQ+BZ8OY" target="_blank" rel="noopener">マネーフォワード →</a>
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  © 2026 飲食店開業ナビ　|　免責事項：本ツールの計算結果はあくまで目安です
+</footer>
+
+<script>
+function showTab(id, btn) {
+  document.getElementById('makanai').style.display = 'none';
+  document.getElementById('advice').style.display = 'none';
+  document.getElementById(id).style.display = 'block';
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function toggleAcc(btn) {
+  var expanded = btn.getAttribute('aria-expanded') === 'true';
+  var body = btn.nextElementSibling;
+  btn.setAttribute('aria-expanded', !expanded);
+  body.classList.toggle('open', !expanded);
+}
+</script>
+</body>
+</html>

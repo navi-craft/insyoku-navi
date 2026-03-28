@@ -57,6 +57,9 @@
     .logo{font-size:15px;font-weight:800;letter-spacing:-.02em;}
     .logo span{color:var(--accent);}
     .hd-r{font-size:11px;color:var(--muted);}
+    .hd-nav{display:flex;gap:10px;align-items:center;}
+    .hd-nav a{font-size:11px;color:var(--muted);white-space:nowrap;padding:3px 8px;border-radius:6px;}
+    .hd-nav a:hover{background:var(--accent-soft);color:var(--accent);}
 
     /* ── HERO ── */
     .hero{background:linear-gradient(140deg,#111827 0%,#1e2d40 60%,#1a3a5c 100%);color:#fff;padding:52px 20px 44px;text-align:center;}
@@ -188,7 +191,10 @@
 <!-- HEADER -->
 <header class="hd">
   <div class="logo">飲食店<span>開業ナビ</span><span style="font-size:11px;color:var(--muted);font-weight:400;margin-left:8px;">石川県版</span></div>
-  <div class="hd-r">無料 ／ 比較・評価なし</div>
+  <nav class="hd-nav">
+    <a href="/insyoku-navi/simulator.html">売上シミュレーター</a>
+    <a href="/insyoku-navi/tips.html">開業Tips</a>
+  </nav>
 </header>
 
 <!-- HERO -->

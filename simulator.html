@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZCZ5VWE43F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZCZ5VWE43F');
+</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>飲食店売上シミュレーター｜手残り・原価・人件費を簡単計算</title>
+  <meta name="description" content="業種を選ぶだけで原価率を自動設定。日販・人件費を入力すれば手残り概算がすぐわかる無料ツール。飲食店開業前のシミュレーションに。">
+  <meta property="og:title" content="飲食店売上シミュレーター｜手残り・原価・人件費を簡単計算" />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://navi-craft.github.io/insyoku-navi/simulator.html" />
+  <style>
+    :root {
+      --bg:#f8f9fb; --card:#fff; --text:#1a1f2e; --muted:#6b7280; --line:#e8eaed;
+      --accent:#e85d04; --accent-soft:#fff4ee;
+      --green:#059669; --green-soft:#ecfdf5;
+      --orange:#d97706; --orange-soft:#fffbeb;
+      --red:#dc2626; --red-soft:#fef2f2;
+      --shadow-sm:0 2px 8px rgba(0,0,0,.06);
+      --shadow:0 8px 24px rgba(0,0,0,.09);
+      --r:16px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;}
+    a{color:inherit;text-decoration:none;}
+
+    /* HEADER */
+    .hd{background:var(--card);border-bottom:1px solid var(--line);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:var(--shadow-sm);}
+    .logo{font-size:15px;font-weight:800;letter-spacing:-.02em;}
+    .logo span{color:var(--accent);}
+    .hd-nav{display:flex;gap:12px;align-items:center;flex-shrink:0;}
+    .hd-nav a{font-size:11px;color:var(--muted);white-space:nowrap;padding:4px 8px;border-radius:6px;transition:background .15s;}
+    .hd-nav a:hover{background:var(--accent-soft);color:var(--accent);}
+    .hd-nav a.active{color:var(--accent);font-weight:700;}
+
+    /* HERO */
+    .hero{background:linear-gradient(140deg,#e85d04 0%,#f4a261 100%);color:#fff;padding:52px 20px 44px;text-align:center;}
+    .hero-icon{font-size:40px;margin-bottom:12px;}
+    .hero h1{font-size:clamp(22px,5vw,36px);font-weight:900;line-height:1.2;margin-bottom:10px;}
+    .hero-sub{color:rgba(255,255,255,.85);font-size:13px;max-width:480px;margin:0 auto;}
+
+    /* MAIN */
+    .wrap{max-width:680px;margin:0 auto;padding:36px 18px 80px;}
+
+    /* CARD */
+    .card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow-sm);border:1px solid var(--line);padding:24px;margin-bottom:20px;}
+    .step-label{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+    .step-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .step-title{font-size:15px;font-weight:700;}
+
+    /* INPUTS */
+    label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px;}
+    select, input[type="number"]{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:15px;background:#fff;color:var(--text);-webkit-appearance:none;appearance:none;}
+    select:focus, input:focus{outline:2px solid var(--accent);border-color:var(--accent);}
+    .input-group{margin-bottom:16px;}
+    .input-suffix{display:flex;align-items:center;gap:8px;}
+    .input-suffix input{flex:1;}
+    .suffix{font-size:14px;color:var(--muted);white-space:nowrap;}
+    .custom-rate{margin-top:12px;display:none;}
+
+    /* CALC BUTTON */
+    .calc-btn{width:100%;padding:16px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-size:17px;font-weight:800;cursor:pointer;letter-spacing:.02em;transition:opacity .15s;}
+    .calc-btn:hover{opacity:.88;}
+
+    /* RESULT */
+    .result{display:none;}
+    .result-box{background:var(--card);border-radius:var(--r);border:2px solid var(--line);padding:24px;margin-bottom:16px;}
+    .result-title{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:16px;letter-spacing:.05em;}
+    .result-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:15px;}
+    .result-row:last-of-type{border-bottom:none;}
+    .result-row.total{font-weight:800;font-size:17px;color:var(--text);}
+    .result-row .label-text{color:var(--muted);}
+    .result-row .minus{color:var(--red);}
+    .result-row .val{font-weight:700;}
+    .profit-badge{display:inline-block;padding:6px 14px;border-radius:8px;font-size:13px;font-weight:700;margin-top:12px;}
+    .profit-good{background:var(--green-soft);color:var(--green);}
+    .profit-mid{background:var(--orange-soft);color:var(--orange);}
+    .profit-bad{background:var(--red-soft);color:var(--red);}
+
+    /* MONTHLY/YEARLY */
+    .scale-box{background:var(--accent-soft);border-radius:12px;padding:16px 20px;margin-bottom:16px;}
+    .scale-title{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:10px;}
+    .scale-row{display:flex;justify-content:space-between;font-size:14px;padding:4px 0;}
+    .scale-row .sv{font-weight:700;}
+
+    /* ADVICE */
+    .advice-box{background:#f0fdf4;border-left:4px solid var(--green);border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:20px;font-size:13px;color:#065f46;line-height:1.6;}
+
+    /* AFFILIATE */
+    .affiliate-section{margin-top:8px;}
+    .affiliate-title{font-size:13px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+    .affiliate-title::before{content:"💡";}
+    .aff-row{display:flex;gap:10px;flex-wrap:wrap;}
+    .aff-btn{flex:1;min-width:140px;padding:12px 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:13px;font-weight:700;text-align:center;color:var(--text);transition:box-shadow .15s;}
+    .aff-btn:hover{box-shadow:var(--shadow);}
+    .aff-btn small{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:2px;}
+
+    /* FOOTER */
+    footer{text-align:center;padding:32px 20px;font-size:11px;color:var(--muted);border-top:1px solid var(--line);}
+    @media(max-width:480px){
+      .hd-nav a{font-size:10px;padding:3px 5px;}
+    }
+  </style>
+</head>
+<body>
+
+<header class="hd">
+  <a href="/insyoku-navi/" class="logo">🍽️ 飲食店<span>開業ナビ</span></a>
+  <nav class="hd-nav">
+    <a href="/insyoku-navi/">トップ</a>
+    <a href="/insyoku-navi/simulator.html" class="active">売上シミュレーター</a>
+    <a href="/insyoku-navi/tips.html">開業Tips</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-icon">🧮</div>
+  <h1>売上シミュレーター</h1>
+  <p class="hero-sub">「1日いくら売れば手残りが出るか」を3ステップで計算</p>
+</section>
+
+<main class="wrap">
+
+  <!-- STEP 1 -->
+  <div class="card">
+    <div class="step-label">
+      <div class="step-num">1</div>
+      <div class="step-title">業種を選ぶ</div>
+    </div>
+    <div class="input-group">
+      <label for="genre">業態</label>
+      <select id="genre" onchange="onGenreChange()">
+        <option value="30">ラーメン・麺類（原価率 30%）</option>
+        <option value="25">カフェ・喫茶（原価率 25%）</option>
+        <option value="35">定食・食堂（原価率 35%）</option>
+        <option value="35">居酒屋・バー（原価率 35%）</option>
+        <option value="50">焼肉・焼き鳥（原価率 50%）</option>
+        <option value="45">寿司・和食（原価率 45%）</option>
+        <option value="30">ファストフード（原価率 30%）</option>
+        <option value="custom">その他（原価率を手入力）</option>
+      </select>
+    </div>
+    <div class="custom-rate input-group" id="customRateWrap">
+      <label for="customRate">原価率（%）</label>
+      <div class="input-suffix">
+        <input type="number" id="customRate" min="1" max="99" placeholder="例: 40" />
+        <span class="suffix">%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="card">
+    <div class="step-label">
+      <div class="step-num">2</div>
+      <div class="step-title">数字を入力</div>
+    </div>
+    <div class="input-group">
+      <label for="sales">1日の売上目標</label>
+      <div class="input-suffix">
+        <input type="number" id="sales" min="0" placeholder="例: 100000" />
+        <span class="suffix">円</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <label for="labor">1日の人件費（全スタッフ合計）</label>
+      <div class="input-suffix">
+        <input type="number" id="labor" min="0" placeholder="例: 25000" />
+        <span class="suffix">円</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="card">
+    <div class="step-label">
+      <div class="step-num">3</div>
+      <div class="step-title">計算する</div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">計算する →</button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result" id="result">
+
+    <div class="result-box">
+      <div class="result-title">【計算結果】</div>
+      <div class="result-row">
+        <span class="label-text">1日の売上</span>
+        <span class="val" id="r-sales"></span>
+      </div>
+      <div class="result-row">
+        <span class="label-text minus" id="r-cost-label">− 原価（30%）</span>
+        <span class="val minus" id="r-cost"></span>
+      </div>
+      <div class="result-row">
+        <span class="label-text minus">− 人件費</span>
+        <span class="val minus" id="r-labor"></span>
+      </div>
+      <div class="result-row">
+        <span class="label-text minus">− 家賃目安（10%）</span>
+        <span class="val minus" id="r-rent"></span>
+      </div>
+      <div class="result-row total">
+        <span>手残り概算</span>
+        <span id="r-profit"></span>
+      </div>
+      <div id="r-badge"></div>
+      <p style="font-size:11px;color:var(--muted);margin-top:10px;">※ 光熱費・消耗品等で実際はさらに3〜5%引かれます。<br>※ 家賃は売上の10%を業界目安として自動計算しています。</p>
+    </div>
+
+    <div class="scale-box">
+      <div class="scale-title">月間・年間換算</div>
+      <div class="scale-row"><span>月間（25営業日換算）</span><span class="sv" id="r-monthly"></span></div>
+      <div class="scale-row"><span>年間（300日換算）</span><span class="sv" id="r-yearly"></span></div>
+    </div>
+
+    <div class="advice-box" id="r-advice"></div>
+
+    <div class="card affiliate-section">
+      <div class="affiliate-title">売上・経費の管理はクラウド会計で楽になります</div>
+      <div class="aff-row">
+        <a class="aff-btn" href="https://px.a8.net/svt/ejp?a8mat=4AZNCL+1KK78Y+3SPO+9FL80Y" target="_blank" rel="noopener">
+          freee 開業
+          <small>青色申告・確定申告に対応</small>
+        </a>
+        <a class="aff-btn" href="https://px.a8.net/svt/ejp?a8mat=4AZO4H+37I44Y+4JGQ+BZ8OY" target="_blank" rel="noopener">
+          マネーフォワード
+          <small>帳簿づけを自動化</small>
+        </a>
+      </div>
+    </div>
+
+  </div><!-- /result -->
+
+</main>
+
+<footer>
+  © 2026 飲食店開業ナビ　|　免責事項：本ツールの計算結果はあくまで目安です
+</footer>
+
+<script>
+var _genreData = {
+  "30": { rate: 30, advice: "麺類は回転率が勝負。ランチのピーク対応で日販を伸ばせます。" },
+  "25": { rate: 25, advice: "原価は低めですが客単価も低い。ドリンク＋フードのセット誘導が鍵です。" },
+  "35_teishoku": { rate: 35, advice: "定食は客単価が安定しやすい。ランチ特化でコストを抑えましょう。" },
+  "35_izakaya": { rate: 35, advice: "居酒屋はドリンクで粗利を稼ぐのが基本。フードは集客の呼び水です。" },
+  "50": { rate: 50, advice: "原価50%は高めですが客単価も高い。テーブル回転数を意識してください。" },
+  "45": { rate: 45, advice: "和食・寿司は素材の鮮度が命。仕入れルート確保が粗利に直結します。" },
+  "30ff": { rate: 30, advice: "ファストフードは回転数と標準化が勝負。オペレーション設計を先に固めましょう。" },
+  "custom": { rate: null, advice: "利益率20%以上を目標に、まず原価と人件費を把握することが大切です。" }
+};
+
+var _genreAdvice = [
+  "麺類は回転率が勝負。ランチのピーク対応で日販を伸ばせます。",
+  "原価は低めですが客単価も低い。ドリンク＋フードのセット誘導が鍵です。",
+  "定食は客単価が安定しやすい。ランチ特化でコストを抑えましょう。",
+  "居酒屋はドリンクで粗利を稼ぐのが基本。フードは集客の呼び水です。",
+  "原価50%は高めですが客単価も高い。テーブル回転数を意識してください。",
+  "和食・寿司は素材の鮮度が命。仕入れルート確保が粗利に直結します。",
+  "ファストフードは回転数と標準化が勝負。オペレーション設計を先に固めましょう。",
+  "利益率20%以上を目標に、まず原価と人件費を把握することが大切です。"
+];
+
+function onGenreChange() {
+  var sel = document.getElementById('genre');
+  var wrap = document.getElementById('customRateWrap');
+  wrap.style.display = sel.value === 'custom' ? 'block' : 'none';
+}
+
+function fmt(n) {
+  return '¥' + Math.round(n).toLocaleString();
+}
+
+function calculate() {
+  var sel = document.getElementById('genre');
+  var salesVal = parseFloat(document.getElementById('sales').value);
+  var laborVal = parseFloat(document.getElementById('labor').value) || 0;
+
+  if (!salesVal || salesVal <= 0) {
+    alert('売上目標を入力してください。');
+    return;
+  }
+
+  var rate;
+  if (sel.value === 'custom') {
+    rate = parseFloat(document.getElementById('customRate').value);
+    if (!rate || rate <= 0 || rate >= 100) {
+      alert('原価率を正しく入力してください（1〜99）。');
+      return;
+    }
+  } else {
+    rate = parseFloat(sel.value);
+  }
+
+  var cost = salesVal * rate / 100;
+  var rent = salesVal * 0.10;
+  var profit = salesVal - cost - laborVal - rent;
+  var profitRate = profit / salesVal * 100;
+
+  document.getElementById('r-sales').textContent = fmt(salesVal);
+  document.getElementById('r-cost-label').textContent = '− 原価（' + rate + '%）';
+  document.getElementById('r-cost').textContent = fmt(cost);
+  document.getElementById('r-labor').textContent = fmt(laborVal);
+  document.getElementById('r-rent').textContent = fmt(rent);
+  document.getElementById('r-profit').textContent = fmt(profit);
+  document.getElementById('r-monthly').textContent = fmt(profit * 25);
+  document.getElementById('r-yearly').textContent = fmt(profit * 300);
+
+  var badge = document.getElementById('r-badge');
+  var cls, msg;
+  if (profitRate >= 20) {
+    cls = 'profit-good'; msg = '利益率 ' + profitRate.toFixed(1) + '%　良好です ✅';
+  } else if (profitRate >= 10) {
+    cls = 'profit-mid'; msg = '利益率 ' + profitRate.toFixed(1) + '%　やや厳しめです ⚠️';
+  } else {
+    cls = 'profit-bad'; msg = '利益率 ' + profitRate.toFixed(1) + '%　要見直しです ❌';
+  }
+  badge.innerHTML = '<span class="profit-badge ' + cls + '">' + msg + '</span>';
+
+  var idx = Array.from(sel.options).indexOf(sel.options[sel.selectedIndex]);
+  document.getElementById('r-advice').textContent = _genreAdvice[Math.min(idx, _genreAdvice.length - 1)];
+
+  document.getElementById('result').style.display = 'block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
+}
+</script>
+</body>
+</html>
