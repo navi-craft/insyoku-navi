@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ゴーストキッチン営業先リストアップツール｜飲食店開業ナビ</title>
+<meta name="description" content="ゴーストキッチン・クラウドキッチン開業者向け。エリアと業態を入力するだけで、優先度付きの営業先リストとアプローチ文を自動生成。Googleマップ検索リンク付き。">
+<link rel="canonical" href="https://navi-craft.github.io/insyoku-navi/ghost-kitchen.html">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZCZ5VWE43F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZCZ5VWE43F');
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--dark:#0f172a;--dark2:#1e293b;--gray:#64748b;
+  --light:#f8fafc;--white:#fff;--border:#e2e8f0;
+  --green:#16a34a;--green-light:#dcfce7;
+  --orange:#ea580c;--orange-light:#ffedd5;
+  --radius:12px;--font:'Noto Sans JP',sans-serif;
+}
+body{font-family:var(--font);color:var(--dark);background:var(--light);line-height:1.7}
+
+/* ナビ */
+.nav{background:var(--white);border-bottom:1px solid var(--border);padding:14px 20px;position:sticky;top:0;z-index:100}
+.nav-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-weight:700;color:var(--primary);text-decoration:none;font-size:15px}
+.nav-back{font-size:13px;color:var(--gray);text-decoration:none}
+.nav-back:hover{color:var(--primary)}
+
+/* ヒーロー */
+.hero{background:linear-gradient(135deg,#1e3a5f,var(--primary));color:#fff;padding:48px 20px 40px;text-align:center}
+.hero-tag{display:inline-block;background:rgba(255,255,255,.2);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:16px}
+.hero h1{font-size:clamp(20px,5vw,28px);font-weight:900;line-height:1.4;margin-bottom:12px}
+.hero p{font-size:15px;color:rgba(255,255,255,.85);max-width:560px;margin:0 auto}
+
+/* メインコンテンツ */
+.main{max-width:860px;margin:0 auto;padding:40px 20px 60px}
+
+/* 入力フォーム */
+.tool-card{background:var(--white);border-radius:var(--radius);padding:32px;box-shadow:0 4px 20px rgba(0,0,0,.08);margin-bottom:32px}
+.tool-card h2{font-size:18px;font-weight:900;color:var(--dark);margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--primary-light)}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-bottom:24px}
+.form-group label{display:block;font-size:13px;font-weight:700;color:var(--gray);margin-bottom:8px}
+.form-group input,.form-group select{width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:8px;font-size:15px;font-family:var(--font);outline:none;transition:border-color .2s;background:var(--white)}
+.form-group input:focus,.form-group select:focus{border-color:var(--primary)}
+.generate-btn{width:100%;padding:16px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:900;cursor:pointer;font-family:var(--font);transition:background .2s}
+.generate-btn:hover{background:var(--primary-dark)}
+
+/* 結果エリア */
+.results{display:none}
+.results-header{margin-bottom:24px}
+.results-header h2{font-size:20px;font-weight:900;color:var(--dark);margin-bottom:6px}
+.results-header p{font-size:14px;color:var(--gray)}
+.priority-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+.legend-item{font-size:13px;font-weight:700}
+.legend-item.top{color:var(--green)}
+.legend-item.mid{color:var(--primary)}
+.legend-item.low{color:var(--gray)}
+
+/* 営業先カード */
+.prospect-list{display:flex;flex-direction:column;gap:16px;margin-bottom:32px}
+.prospect-card{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.card-header{padding:16px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+.priority-badge{font-size:18px;font-weight:900;width:36px;text-align:center;flex-shrink:0}
+.priority-badge.top{color:var(--green)}
+.priority-badge.mid{color:var(--primary)}
+.priority-badge.low{color:var(--gray)}
+.card-title-area{flex:1}
+.card-title{font-size:16px;font-weight:900;color:var(--dark)}
+.card-meta{font-size:13px;color:var(--gray);margin-top:2px}
+.card-toggle{font-size:20px;color:var(--gray);transition:transform .2s}
+.card-toggle.open{transform:rotate(180deg)}
+.card-body{display:none;padding:0 20px 20px;border-top:1px solid var(--border)}
+.card-body.open{display:block}
+
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+.info-item{background:var(--light);border-radius:8px;padding:12px}
+.info-label{font-size:11px;font-weight:700;color:var(--gray);margin-bottom:4px}
+.info-value{font-size:14px;font-weight:700;color:var(--dark)}
+
+.maps-links{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.maps-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;background:var(--primary-light);color:var(--primary);border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;transition:background .2s}
+.maps-btn:hover{background:#bfdbfe}
+
+.pitch-section{margin-top:16px}
+.pitch-label{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:8px}
+.pitch-box{background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:16px;font-size:14px;line-height:1.8;color:var(--dark2);white-space:pre-wrap}
+.copy-btn{margin-top:8px;padding:8px 16px;background:var(--white);border:1px solid var(--border);border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);transition:background .2s}
+.copy-btn:hover{background:var(--light)}
+
+/* 注意事項 */
+.notice{background:#fef3c7;border:1px solid #fcd34d;border-radius:var(--radius);padding:16px 20px;margin-bottom:32px}
+.notice p{font-size:14px;color:#92400e}
+
+/* 関連リンク */
+.related{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:40px}
+.related-card{background:var(--white);border-radius:var(--radius);padding:20px;text-decoration:none;color:var(--dark);border:1px solid var(--border);transition:transform .2s}
+.related-card:hover{transform:translateY(-3px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.related-tag{font-size:11px;font-weight:700;color:var(--primary)}
+.related-title{font-size:14px;font-weight:700;margin-top:6px}
+
+footer{text-align:center;padding:24px;font-size:12px;color:var(--gray)}
+footer a{color:var(--gray);text-decoration:none;margin:0 8px}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">&#x1F373; 飲食店開業ナビ</a>
+    <a href="index.html" class="nav-back">&larr; トップへ戻る</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Ghost Kitchen</div>
+  <h1>ゴーストキッチン向け<br>営業先リストアップツール</h1>
+  <p>エリアと業態を入力するだけ。優先度付きの営業先リスト・アプローチ方法・営業トーク文を自動生成します。</p>
+</div>
+
+<main class="main">
+
+  <!-- 入力フォーム -->
+  <div class="tool-card">
+    <h2>&#x1F4CB; 営業先を生成する</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="area-input">営業エリア（市区町村）</label>
+        <input type="text" id="area-input" placeholder="例：渋谷区、大阪市北区、名古屋市中区" maxlength="30">
+      </div>
+      <div class="form-group">
+        <label for="food-type">提供する食の種類</label>
+        <select id="food-type">
+          <option value="">選択してください</option>
+          <option value="bento">弁当・定食</option>
+          <option value="sozai">惣菜・副菜</option>
+          <option value="cafe">カフェ系・軽食</option>
+          <option value="ethnic">エスニック・特定料理</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="price-range">1食あたりの単価帯</label>
+        <select id="price-range">
+          <option value="">選択してください</option>
+          <option value="low">〜800円（コスパ重視）</option>
+          <option value="mid">800〜1,200円（スタンダード）</option>
+          <option value="high">1,200円〜（プレミアム）</option>
+        </select>
+      </div>
+    </div>
+    <button class="generate-btn" onclick="generateList()">&#x1F50D; 営業先リストを生成する</button>
+  </div>
+
+  <!-- 結果エリア -->
+  <div class="results" id="results">
+    <div class="results-header">
+      <h2 id="results-title"></h2>
+      <p id="results-desc"></p>
+      <div class="priority-legend">
+        <span class="legend-item top">&#x25CE; 最優先（成約しやすい）</span>
+        <span class="legend-item mid">&#x25CB; 積極的にアプローチ</span>
+        <span class="legend-item low">&#x25B3; 条件が合えば検討</span>
+      </div>
+    </div>
+
+    <div class="notice">
+      <p>&#x26A0;&#xFE0F; <strong>ご注意：</strong>優先度はあくまで一般的な傾向です。エリアや競合状況により異なります。まずは◎から10〜20件あたりを目標に動き始めましょう。</p>
+    </div>
+
+    <div class="prospect-list" id="prospect-list"></div>
+
+    <div class="related">
+      <a href="simulator.html" class="related-card">
+        <div class="related-tag">&#x1F4CA; ツール</div>
+        <div class="related-title">売上シミュレーターで収益を試算する</div>
+      </a>
+      <a href="tips.html" class="related-card">
+        <div class="related-tag">&#x1F4DD; 開業Tips</div>
+        <div class="related-title">開業前に知っておきたいこと</div>
+      </a>
+      <a href="index.html" class="related-card">
+        <div class="related-tag">&#x1F3E0; トップ</div>
+        <div class="related-title">都道府県別の開業ナビへ</div>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <a href="index.html">トップ</a>
+  <a href="simulator.html">売上シミュレーター</a>
+  <a href="tips.html">開業Tips</a>
+  <a href="ghost-kitchen.html">営業先ツール</a>
+  <p style="margin-top:12px">&copy; 2025-2026 飲食店開業ナビ All Rights Reserved.</p>
+</footer>
+
+<script>
+// ===== 営業先データ =====
+const PROSPECTS = [
+  {
+    id: 'office',
+    name: 'オフィス・中小企業（10〜100人規模）',
+    icon: '🏢',
+    lot: '10〜50食／日',
+    contact: '総務担当・社長（小規模の場合）',
+    continuity: '高い（契約継続しやすい）',
+    tip: '昼食の手配に困っているところが多い。月契約を提案すると受け入れられやすい。',
+    mapKeywords: ['中小企業', 'オフィスビル', '会社'],
+    priority: {
+      bento:  { low:'○', mid:'◎', high:'◎' },
+      sozai:  { low:'○', mid:'○', high:'○' },
+      cafe:   { low:'○', mid:'◎', high:'◎' },
+      ethnic: { low:'○', mid:'◎', high:'◎' }
+    },
+    pitch: function(area, food, price) {
+      return 'はじめまして。' + area + 'でゴーストキッチンを運営しております○○と申します。\n\n御社のスタッフの皆様へ、' + foodLabel(food) + 'のランチ配達サービスをご提案したくご連絡しました。\n\n【サービス概要】\n・' + area + 'エリアへ毎日ランチタイムに配達\n・1食あたり' + priceLabel(price) + '\n・最低注文数：5食〜（曜日・数量は柔軟に対応可）\n・月払い・週払いどちらも対応\n\nお試しで1週間無料提供もご相談可能です。\nご興味がございましたら、お気軽にお声がけください。';
+    }
+  },
+  {
+    id: 'factory',
+    name: '工場・倉庫・物流センター',
+    icon: '🏭',
+    lot: '20〜100食／日',
+    contact: '総務担当・工場長',
+    continuity: '非常に高い（毎日・大ロット）',
+    tip: 'ボリューム重視のメニューが刺さりやすい。外部の食堂が少ないエリアのほうが需要が高い。',
+    mapKeywords: ['工場', '倉庫', '物流センター', '製造業'],
+    priority: {
+      bento:  { low:'◎', mid:'◎', high:'△' },
+      sozai:  { low:'◎', mid:'○', high:'△' },
+      cafe:   { low:'△', mid:'△', high:'△' },
+      ethnic: { low:'○', mid:'○', high:'△' }
+    },
+    pitch: function(area, food, price) {
+      return 'はじめまして。' + area + 'でゴーストキッチンを運営しております○○と申します。\n\n工場・倉庫で働く皆様へ、ボリューム満点の' + foodLabel(food) + 'をご提供できないかと思いご連絡しました。\n\n【サービス概要】\n・' + area + 'エリアへ毎日ランチタイムに配達\n・1食あたり' + priceLabel(price) + '（まとめ注文で割引も相談可）\n・最低注文数：10食〜\n・週払い・月払い対応\n\n近隣に食事できる場所が少ない現場の皆様に、手間なく温かいお弁当をお届けします。\nぜひ一度、お試しいただけませんか。';
+    }
+  },
+  {
+    id: 'construction',
+    name: '建設現場・工事現場',
+    icon: '🏗️',
+    lot: '10〜30食／日',
+    contact: '現場監督・現場代理人',
+    continuity: '中（工期による・数ヶ月〜数年）',
+    tip: '現場監督に直接声をかけるのが最速。朝イチか昼前がアポとりやすい。工期が長い現場ほど安定する。',
+    mapKeywords: ['建設会社', '工務店', '建設現場'],
+    priority: {
+      bento:  { low:'◎', mid:'○', high:'△' },
+      sozai:  { low:'○', mid:'○', high:'△' },
+      cafe:   { low:'△', mid:'△', high:'△' },
+      ethnic: { low:'○', mid:'△', high:'△' }
+    },
+    pitch: function(area, food, price) {
+      return '突然のご連絡失礼します。' + area + 'でゴーストキッチンを運営しております○○と申します。\n\n現場で働く皆様のランチに、' + foodLabel(food) + 'の配達サービスをご利用いただけないかと思いご連絡しました。\n\n【サービス概要】\n・指定の現場までランチタイムに配達\n・1食あたり' + priceLabel(price) + '\n・最低注文数：5食〜、前日までの注文でOK\n・支払いは現金・振込どちらも対応\n\n毎日コンビニや外食では大変かと思います。温かいお弁当を現場へお届けします。\nよろしければ一度お試しください。';
+    }
+  },
+  {
+    id: 'clinic',
+    name: 'クリニック・歯科医院・整骨院',
+    icon: '🏥',
+    lot: '5〜20食／日',
+    contact: '院長・事務長・受付責任者',
+    continuity: '高い（スタッフ固定で安定）',
+    tip: '昼休みが短いクリニックほど需要が高い。衛生面・アレルギー対応をアピールすると響く。',
+    mapKeywords: ['クリニック', '歯科', '整骨院', '内科', '皮膚科'],
+    priority: {
+      bento:  { low:'△', mid:'○', high:'◎' },
+      sozai:  { low:'△', mid:'○', high:'○' },
+      cafe:   { low:'△', mid:'○', high:'◎' },
+      ethnic: { low:'△', mid:'○', high:'○' }
+    },
+    pitch: function(area, food, price) {
+      return 'はじめまして。' + area + 'でゴーストキッチンを運営しております○○と申します。\n\n昼休みが短いクリニックのスタッフの皆様に、手軽においしい' + foodLabel(food) + 'をお届けできればと思いご連絡しました。\n\n【サービス概要】\n・' + area + 'エリアへ毎日配達（昼の時間帯に合わせて調整）\n・1食あたり' + priceLabel(price) + '\n・アレルギー対応・衛生管理を徹底\n・最低注文数：3食〜でもOK\n\n外出しなくても、質の高いランチをご用意します。\nぜひお気軽にお問い合わせください。';
+    }
+  },
+  {
+    id: 'salon',
+    name: '美容院・ネイルサロン・エステ',
+    icon: '💇',
+    lot: '3〜10食／日',
+    contact: 'オーナー・店長',
+    continuity: '高い（一度契約すると継続しやすい）',
+    tip: 'ロット数は少ないが継続率が高い。おしゃれで見栄えの良い盛り付けが評価される。SNS映えするパッケージも◎。',
+    mapKeywords: ['美容院', '美容室', 'ネイルサロン', 'エステ', 'ヘアサロン'],
+    priority: {
+      bento:  { low:'△', mid:'○', high:'◎' },
+      sozai:  { low:'△', mid:'○', high:'◎' },
+      cafe:   { low:'○', mid:'◎', high:'◎' },
+      ethnic: { low:'△', mid:'○', high:'○' }
+    },
+    pitch: function(area, food, price) {
+      return 'はじめまして。' + area + 'でゴーストキッチンを運営しております○○と申します。\n\nお客様対応で忙しいサロンのスタッフの皆様に、ランチの配達サービスをご提案したくご連絡しました。\n\n【サービス概要】\n・' + area + 'エリアへランチタイムに配達\n・1食あたり' + priceLabel(price) + '\n・少人数（3食〜）でもOK、曜日・数量は柔軟に対応\n・おしゃれなパッケージで提供\n\nお昼をとりに行く時間がないときも、質の高いランチをお届けします。\nよろしければ一度お試しください。';
+    }
+  },
+  {
+    id: 'welfare',
+    name: '老人ホーム・デイサービス・福祉施設',
+    icon: '🏘️',
+    lot: '30〜100食／日',
+    contact: '施設長・管理栄養士・事務担当',
+    continuity: '非常に高い（長期・大ロット）',
+    tip: '栄養バランスの管理と衛生管理が必須。スタッフ向け食事の提供から始めるのが入りやすい。利用者向けは許認可・栄養士との連携が必要。',
+    mapKeywords: ['老人ホーム', 'デイサービス', '介護施設', '福祉施設'],
+    priority: {
+      bento:  { low:'△', mid:'△', high:'△' },
+      sozai:  { low:'◎', mid:'◎', high:'○' },
+      cafe:   { low:'△', mid:'△', high:'△' },
+      ethnic: { low:'△', mid:'△', high:'△' }
+    },
+    pitch: function(area, food, price) {
+      return 'はじめまして。' + area + 'でゴーストキッチンを運営しております○○と申します。\n\n施設で働くスタッフの皆様へ、栄養バランスを考えた' + foodLabel(food) + 'の配達サービスをご提案したくご連絡しました。\n\n【サービス概要】\n・' + area + 'エリアへ毎日配達\n・1食あたり' + priceLabel(price) + '\n・衛生管理・温度管理を徹底（HACCPに準じた管理）\n・アレルギー対応・カロリー管理にも配慮\n\nまずはスタッフ向けのランチ提供から始め、ご要望があれば利用者向けも相談に応じます。\nお気軽にご連絡ください。';
+    }
+  },
+  {
+    id: 'school',
+    name: '専門学校・各種スクール（スタッフ向け）',
+    icon: '🎓',
+    lot: '5〜20食／日',
+    contact: '事務担当・学校長',
+    continuity: '中（学期によって変動）',
+    tip: '学生向けの提供には許可が必要。まずはスタッフ・教職員向けから始めるのが現実的。長期休暇中は需要が落ちる点に注意。',
+    mapKeywords: ['専門学校', '学校', 'スクール', '予備校'],
+    priority: {
+      bento:  { low:'○', mid:'○', high:'△' },
+      sozai:  { low:'△', mid:'△', high:'△' },
+      cafe:   { low:'△', mid:'○', high:'△' },
+      ethnic: { low:'△', mid:'△', high:'△' }
+    },
+    pitch: function(area, food, price) {
+      return 'はじめまして。' + area + 'でゴーストキッチンを運営しております○○と申します。\n\n先生・スタッフの皆様のランチに、' + foodLabel(food) + 'の配達サービスをご利用いただけないかとご連絡しました。\n\n【サービス概要】\n・' + area + 'エリアへランチタイムに配達\n・1食あたり' + priceLabel(price) + '\n・最低注文数：5食〜、前日までの注文でOK\n\n外に出るお時間がないときも、温かいランチをお届けします。\nご興味がございましたら、お気軽にご連絡ください。';
+    }
+  },
+  {
+    id: 'gym',
+    name: 'スポーツジム・フィットネスクラブ',
+    icon: '💪',
+    lot: '10〜30食／日',
+    contact: 'オーナー・店舗マネージャー',
+    continuity: '中〜高',
+    tip: '健康志向・高タンパクメニューが刺さりやすい。プロテイン系や低糖質メニューがあるとなお良い。カフェ系・スムージーも需要あり。',
+    mapKeywords: ['スポーツジム', 'フィットネス', 'ジム', 'トレーニング'],
+    priority: {
+      bento:  { low:'△', mid:'○', high:'○' },
+      sozai:  { low:'△', mid:'○', high:'○' },
+      cafe:   { low:'○', mid:'◎', high:'◎' },
+      ethnic: { low:'△', mid:'△', high:'△' }
+    },
+    pitch: function(area, food, price) {
+      return 'はじめまして。' + area + 'でゴーストキッチンを運営しております○○と申します。\n\nトレーニング後の食事に、栄養バランスを意識した' + foodLabel(food) + 'の配達サービスをご提案したくご連絡しました。\n\n【サービス概要】\n・' + area + 'エリアへ配達（時間帯は相談可）\n・1食あたり' + priceLabel(price) + '\n・高タンパク・低糖質メニューも対応可\n・スタッフ向けはもちろん、会員様向け販売のご相談も可\n\n健康を大切にされる皆様に、食事面でもサポートできればと思います。\nぜひ一度お話しさせてください。';
+    }
+  }
+];
+
+// ===== ユーティリティ =====
+function foodLabel(type) {
+  var labels = { bento:'お弁当・定食', sozai:'惣菜・副菜', cafe:'カフェ系・軽食', ethnic:'エスニック料理' };
+  return labels[type] || 'お食事';
+}
+function priceLabel(range) {
+  var labels = { low:'600〜800円', mid:'800〜1,200円', high:'1,200円〜' };
+  return labels[range] || '応相談';
+}
+function priorityClass(p) {
+  if (p === '◎') return 'top';
+  if (p === '○') return 'mid';
+  return 'low';
+}
+
+// ===== リスト生成 =====
+function generateList() {
+  var area = document.getElementById('area-input').value.trim();
+  var food = document.getElementById('food-type').value;
+  var price = document.getElementById('price-range').value;
+
+  if (!area || !food || !price) {
+    alert('エリア・食の種類・単価帯をすべて入力・選択してください');
+    return;
+  }
+
+  var sorted = PROSPECTS.map(function(p) {
+    return Object.assign({}, p, { currentPriority: p.priority[food][price] });
+  }).sort(function(a, b) {
+    var order = { '◎': 0, '○': 1, '△': 2 };
+    return order[a.currentPriority] - order[b.currentPriority];
+  });
+
+  document.getElementById('results-title').textContent =
+    '「' + area + '」×「' + foodLabel(food) + '」×「' + priceLabel(price) + '」の営業先リスト';
+  document.getElementById('results-desc').textContent =
+    sorted.filter(function(p) { return p.currentPriority === '◎'; }).length + '件が最優先ターゲットです。まずは◎から動き始めましょう。';
+
+  var list = document.getElementById('prospect-list');
+  list.innerHTML = '';
+  sorted.forEach(function(p, i) {
+    var mapsLinks = p.mapKeywords.map(function(k) {
+      return '<a href="https://www.google.com/maps/search/' + encodeURIComponent(k + ' ' + area) + '" target="_blank" rel="noopener" class="maps-btn">📍 ' + k + 'を探す</a>';
+    }).join('');
+
+    var pitchText = p.pitch(area, food, price);
+    var pClass = priorityClass(p.currentPriority);
+
+    var card = document.createElement('div');
+    card.className = 'prospect-card';
+    card.innerHTML =
+      '<div class="card-header" onclick="toggleCard(' + i + ')">'
+      + '<div class="priority-badge ' + pClass + '">' + p.currentPriority + '</div>'
+      + '<div class="card-title-area">'
+      + '<div class="card-title">' + p.icon + ' ' + p.name + '</div>'
+      + '<div class="card-meta">想定ロット：' + p.lot + ' ／ 継続性：' + p.continuity + '</div>'
+      + '</div>'
+      + '<div class="card-toggle" id="toggle-' + i + '">▼</div>'
+      + '</div>'
+      + '<div class="card-body" id="body-' + i + '">'
+      + '<div class="info-grid">'
+      + '<div class="info-item"><div class="info-label">想定注文数</div><div class="info-value">' + p.lot + '</div></div>'
+      + '<div class="info-item"><div class="info-label">営業窓口</div><div class="info-value">' + p.contact + '</div></div>'
+      + '<div class="info-item"><div class="info-label">継続性</div><div class="info-value">' + p.continuity + '</div></div>'
+      + '</div>'
+      + '<p style="font-size:14px;color:#334155;margin:8px 0 12px;padding:12px;background:#f1f5f9;border-radius:8px;">💡 <strong>アドバイス：</strong>' + p.tip + '</p>'
+      + '<p style="font-size:13px;font-weight:700;color:#64748b;margin-bottom:8px;">📍 Googleマップで探す</p>'
+      + '<div class="maps-links">' + mapsLinks + '</div>'
+      + '<div class="pitch-section">'
+      + '<p class="pitch-label">📝 営業トーク文テンプレート（コピーして使えます）</p>'
+      + '<div class="pitch-box" id="pitch-' + i + '">' + pitchText + '</div>'
+      + '<button class="copy-btn" onclick="copyPitch(' + i + ')">📋 コピーする</button>'
+      + '</div>'
+      + '</div>';
+    list.appendChild(card);
+  });
+
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleCard(i) {
+  var body = document.getElementById('body-' + i);
+  var toggle = document.getElementById('toggle-' + i);
+  body.classList.toggle('open');
+  toggle.classList.toggle('open');
+}
+
+function copyPitch(i) {
+  var text = document.getElementById('pitch-' + i).textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    alert('コピーしました！');
+  });
+}
+</script>
+</body>
+</html>
