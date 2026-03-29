@@ -440,4 +440,7 @@ function showR(){
   document.getElementById('resWrap').classList.add('vis');
   setTimeout(()=>document.getElementById('resWrap').scrollIntoView({behavior:'smooth',block:'start'}),50);
 }
-function doReset(){ selT=null; selCity=null; document.querySelectorAll('.tcard').forEach(c=>c.classList.remove('sel')); document.getElementById('s1').classList.remove('done'); document.ge
+function doReset(){ selT=null; selCity=null; document.querySelectorAll('.tcard').forEach(c=>c.classList.remove('sel')); document.getElementById('s1').classList.remove('done'); document.getElementById('s2').classList.remove('done'); document.getElementById('cityStep').classList.remove('vis'); document.getElementById('resWrap').classList.remove('vis'); document.getElementById('citySel').value=''; chkBtn(); }
+</script>
+</body>
+</html>
