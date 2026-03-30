@@ -316,13 +316,14 @@ const TYPE_CFG = {
 const DATA = {
 
   shoku_local: [
-    { ic:'🥩', name:'名古屋市中央卸売市場（Google検索）', type:'生鮮食材・食肉・鮮魚の一次卸', tags:['市場直送','鮮度高','業務用'], url:'https://www.google.com/search?q=%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8D%B8%E5%A3%B2%E5%B8%82%E5%A0%B4+%E4%BB%95%E5%85%A5%E3%82%8C+%E9%A3%B2%E9%A3%9F%E5%BA%97' },
-    { ic:'🛒', name:'愛知・東海の食材卸業者（Google検索）', type:'愛知県内の業務用食品卸', tags:['愛知対応','業務用食品','冷凍食品対応'], url:'https://www.google.com/search?q=%E6%84%9B%E7%9F%A5+%E6%A5%AD%E5%8B%99%E7%94%A8+%E9%A3%9F%E6%9D%90+%E5%8D%B8%E5%A3%B2' },
+    { ic:'🥩', name:'柴田ハム食品',       type:'業務用食肉卸売（名古屋）',     tags:['名古屋拠点','業務用食肉','飲食店対応'], url:'https://shibata-ham.com/' },
+    { ic:'🥩', name:'丸三食肉株式会社',   type:'精肉卸売・食肉加工',           tags:['精肉専門','加工対応','愛知県内'],       url:'https://marusan-meat.co.jp/' },
   ],
   shoku_search: '食材 仕入れ 業務用 飲食店',
 
   sake_local: [
-    { ic:'🍶', name:'愛知・東海の酒類卸業者（Google検索）', type:'名古屋・愛知の業務用酒類卸', tags:['愛知対応','業務用','配達可'], url:'https://www.google.com/search?q=%E5%90%8D%E5%8F%A4%E5%B1%8B+%E6%A5%AD%E5%8B%99%E7%94%A8+%E9%85%92%E9%A1%9E+%E5%8D%B8%E5%A3%B2' },
+    { ic:'🍶', name:'成田酒販',           type:'業務用酒類卸専門（名古屋）',   tags:['名古屋市','業務用専門','配達対応'], url:'https://web-narita.co.jp/' },
+    { ic:'🍶', name:'株式会社中島屋酒店', type:'業務用酒類食品卸売',           tags:['愛知県内','飲食店対応','配達可'],   url:'https://nakashimaya.co.jp/' },
   ],
   sake_national: [
     { ic:'🍶', name:'なんでも酒やカクヤス', type:'業務用酒類 配達対応（全国）', tags:['全国対応','配達無料','多ジャンル'], url:'https://www.kakuyasu.co.jp/' },
@@ -333,8 +334,8 @@ const DATA = {
   ],
 
   kitchen_local: [
-    { ic:'🍳', name:'テンポスバスターズ 名古屋エリア', type:'業務用厨房機器 新品・中古',     tags:['新品・中古','開業支援','全国展開'], url:'https://tenposbusters.co.jp/' },
-    { ic:'🍳', name:'名古屋の厨房機器販売店（Google検索）', type:'愛知県内の業務用厨房機器店', tags:['愛知対応','中古あり','買取可'],   url:'https://www.google.com/search?q=%E5%90%8D%E5%8F%A4%E5%B1%8B+%E6%A5%AD%E5%8B%99%E7%94%A8+%E5%8E%A8%E6%88%BF%E6%A9%9F%E5%99%A8+%E8%B2%A9%E5%A3%B2' },
+    { ic:'🍳', name:'テンポス名古屋西店',   type:'新品・中古 業務用厨房機器',           tags:['新品・中古','名古屋','開業支援'], url:'https://tenposbusters.co.jp/store/033.html' },
+    { ic:'🍳', name:'厨房卸問屋 名調',       type:'業務用厨房機器・調理道具卸売（名古屋）', tags:['名古屋老舗','卸価格','全国発送'], url:'https://meicho.jp/' },
   ],
   kitchen_national: [
     { ic:'🍳', name:'Amazon 業務用厨房機器', type:'業務用厨房機器・調理道具 全国通販', tags:['即日〜翌日配送','新品・中古','Amazon保証'], url:'https://www.amazon.co.jp/s?k=%E6%A5%AD%E5%8B%99%E7%94%A8+%E5%8E%A8%E6%88%BF%E6%A9%9F%E5%99%A8&tag=shucchouconci-22', aff:true },
@@ -353,7 +354,7 @@ const DATA = {
   gomi_search: 'ごみ回収 一般廃棄物 飲食店 産業廃棄物 許可業者',
 
   clean_local: [
-    { ic:'🧹', name:'愛知の害虫駆除・清掃業者（Google検索）', type:'愛知県の飲食店向け害虫駆除・衛生管理', tags:['愛知対応','飲食店対応','HACCP対応'], url:'https://www.google.com/search?q=%E6%84%9B%E7%9F%A5+%E5%AE%B3%E8%99%AB%E9%A7%86%E9%99%A4+%E6%B8%85%E6%8E%83+%E9%A3%B2%E9%A3%9F%E5%BA%97' },
+    { ic:'🧹', name:'害獣・害虫駆除専門店コマツ', type:'飲食店対応の害虫・害獣駆除（愛知）', tags:['愛知対応','飲食店実績','HACCP対応'], url:'https://gaichuukujyo.co.jp/' },
   ],
   clean_search: '害虫駆除 清掃 飲食店 厨房',
 
@@ -363,7 +364,8 @@ const DATA = {
   ],
 
   tax_local: [
-    { ic:'📊', name:'名古屋の飲食専門税理士（Google検索）', type:'名古屋・愛知の飲食業専門税理士', tags:['飲食特化','名古屋市内','創業支援'], url:'https://www.google.com/search?q=%E5%90%8D%E5%8F%A4%E5%B1%8B+%E9%A3%B2%E9%A3%9F%E5%BA%97+%E9%96%8B%E6%A5%AD+%E7%A8%8E%E7%90%86%E5%A3%AB' },
+    { ic:'📊', name:'税理士事務所エイゼット', type:'飲食店開業・創業融資対応（名古屋）', tags:['飲食特化','創業融資','名古屋市'], url:'https://az-tax.jp/' },
+    { ic:'📊', name:'税理士法人エスペランサ', type:'会社設立・創業融資支援（名古屋）',   tags:['創業支援','名古屋市','法人対応'], url:'https://esp-z.com/' },
   ],
   tax_national: [
     { ic:'📊', name:'freee（クラウド会計）',           type:'個人事業主向け クラウド会計', tags:['青色申告対応','銀行自動連携','スマホ管理'], url:'https://px.a8.net/svt/ejp?a8mat=4AZNCL+1KK78Y+3SPO+9FL80Y', aff:true },
