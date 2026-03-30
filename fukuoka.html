@@ -302,6 +302,27 @@ const DATA={
   ],
 };
 
+function showR(){
+  const tc = TYPE_CFG[selT];
+  document.getElementById('rTitle').innerHTML = `${selCity} × <span>${tc.label}</span>`;
+  document.getElementById('s2').classList.add('done');
+  const wrap = document.getElementById('accWrap');
+  wrap.innerHTML = '';
+  buildSections(tc).forEach((sec, i)=>{
+    const d = document.createElement('div');
+    d.className = 'acc' + (i===0?' open':'');
+    d.innerHTML = `
+      <div class="acc-hd">
+        <div class="acc-l"><span class="acc-ic">${sec.ic}</span><div class="acc-ti">${sec.ti}</div></div>
+        <div class="acc-r"><span class="abadge ${sec.bc}">${sec.badge}</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="acc-body">${sec.body}</div>`;
+    d.querySelector('.acc-hd').addEventListener('click',()=>d.classList.toggle('open'));
+    wrap.appendChild(d);
+  });
+  document.getElementById('resWrap').classList.add('vis');
+  setTimeout(()=>document.getElementById('resWrap').scrollIntoView({behavior:'smooth',block:'start'}),50);
+}
 function getProcedures(city){return [{name:'保健所',sub:`飲食店営業許可（必須）— ${city}担当の保健所へ。事前相談を強く推奨。`,googleQ:YAKUSHO_QUERIES.hokenjo(city)},{name:'消防署',sub:'防火管理者選任届（客席30席以上 or 延床300㎡以上で必要）',googleQ:YAKUSHO_QUERIES.shobo(city)},{name:'税務署',sub:'開業届（開業後1か月以内）＋青色申告承認申請書（同時提出推奨）',googleQ:YAKUSHO_QUERIES.zeimusho()},{name:'警察署',sub:'深夜酒類提供飲食店営業届（バー・居酒屋等 0時以降営業の場合のみ）',googleQ:YAKUSHO_QUERIES.keisatsu(city)}];}
 function buildSections(tc){return[{ic:'🏛️',ti:'まずやること（役所手続き）',badge:'最重要・先にやる',bc:'ab-warn',body:renderProc()},{ic:'🥩',ti:`食材・仕入れ先（${tc.shokuLabel}）`,badge:'毎週必要',bc:'ab-ora',body:renderV({local:DATA.shoku_local,sq:DATA.shoku_search+' '+selCity})},{ic:'🍶',ti:'酒類・飲料の仕入れ先',badge:tc.sake?'必須':'状況次第',bc:tc.sake?'ab-ora':'ab-gray',body:renderV({local:DATA.sake_local,national:DATA.sake_national})},{ic:'🔥',ti:'ガス・電力',badge:'固定費',bc:'ab-gray',body:renderV({local:DATA.gas_local,sq:'ガス 業務用 飲食店 '+selCity})},{ic:'🍳',ti:'厨房機器',badge:'開業時購入',bc:'ab-gray',body:renderV({local:DATA.kitchen_local,national:DATA.kitchen_national})},{ic:'📦',ti:'消耗品・衛生用品',badge:'定期発注',bc:'ab-gray',body:renderV({national:DATA.shoumou_national})},{ic:'🎵',ti:'BGM（店内音楽）',badge:'著作権に注意！',bc:'ab-warn',body:`<div class="warn-box">⚠️ <strong>個人用Spotify・YouTubeを店内でかけることは著作権法上問題になる場合があります。</strong>必ず業務用サービスを利用してください。</div>`+renderV({national:DATA.bgm_national})},{ic:'🗑️',ti:'ごみ回収（産業廃棄物）',badge:'月次契約',bc:'ab-gray',body:`<div class="info-box">⚠️ <strong>飲食店の廃棄物は家庭ごみの日には出せません。</strong>産業廃棄物・一般廃棄物収集業者との契約が必要です。</div>`+renderV({sq:DATA.gomi_search+' '+selCity})},{ic:'🧹',ti:'清掃・害虫駆除',badge:'運営維持',bc:'ab-gray',body:renderV({local:DATA.clean_local,sq:DATA.clean_search+' '+selCity})},{ic:'🛡️',ti:'保険（火災・賠償責任・食中毒）',badge:'開業前に必ず加入',bc:'ab-warn',body:renderV({national:DATA.hoken_national})},{ic:'📊',ti:'税理士・会計',badge:'開業時から顧問を',bc:'ab-green',body:renderV({local:DATA.tax_local,national:DATA.tax_national})},{ic:'👤',ti:'求人・採用',badge:'必要に応じて',bc:'ab-gray',body:renderV({local:DATA.kyuujin_local,national:DATA.kyuujin_national})},{ic:'💳',ti:'POS・レジシステム',badge:'補助',bc:'ab-gray',body:renderV({national:DATA.pos_national})}];}
 function renderProc(){const rows=getProcedures(selCity).map(p=>`<div class="prow"><div><div class="pname">${p.name}</div><div class="psub">${p.sub}</div></div><a class="plink-g" href="https://www.google.com/search?q=${encodeURIComponent(p.googleQ)}" target="_blank" rel="noopener">🔍 Google検索</a></div>`).join('');return `<div class="ocard"><h4>⚠️ 開業前に完了が必要な届出・許可（${selCity}の目安）</h4><div class="prows">${rows}</div></div><div class="onote">※ ボタンを押すと最新情報をGoogle検索できます。エリア・業態・規模によって必要な届出が異なるため、各窓口に事前確認してください。</div>`;}
